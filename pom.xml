@@ -11,7 +11,7 @@
     </parent>
     <groupId>org.js</groupId>
     <artifactId>Exercise</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -52,9 +52,9 @@
         </dependency>
             <!-- MySQL Database Driver (Add only if you plan to use MySQL) -->
         <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>mssql-jdbc</artifactId>
-            <scope>runtime</scope>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.7.2</version> <!-- Compatible with PostgreSQL 17 -->
         </dependency>
         <!-- Spring Boot Starter -->
         <dependency>
