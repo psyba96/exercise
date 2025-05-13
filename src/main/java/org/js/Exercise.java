@@ -18,11 +18,9 @@ public class Exercise {
     private String equipment;
     @Enumerated(EnumType.STRING)
     private List<Muscle> secondaryMuscles;
-
-
     @ElementCollection
     @CollectionTable(name = "exercise_instructions", joinColumns = @JoinColumn(name = "exercise_id"))
-    @Column(name = "instructions")
+    @Column(name = "instructions",length = 1000)
     private List<String> instructions;
     private String category;
     @Enumerated(EnumType.STRING)
