@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto17
+    commands:
+      - echo Installing Maven...
+      - apt-get update && apt-get install -y maven
+  build:
+    commands:
+      - echo Building the Spring Boot app...
+      - mvn clean package -DskipTests
+artifacts:
+  files:
+    - target/*.jar
