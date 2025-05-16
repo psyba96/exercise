@@ -10,4 +10,4 @@ phases:
       - mvn clean package -DskipTests
 artifacts:
   files:
-    - target/Exercise-1.0.2.jar.original
+    - /tmp/codebuild/output/src780/src/s3/01/target/Exercise-1.0.2.jar.original
