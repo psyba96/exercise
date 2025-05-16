@@ -6,7 +6,7 @@ phases:
       java: corretto17
     commands:
       - echo Installing Maven...
-      - sudo yum install -y maven
+
   build:
     commands:
       - echo Building the Spring Boot app...
