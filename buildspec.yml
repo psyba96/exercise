@@ -10,4 +10,4 @@ phases:
       - mvn clean package -DskipTests
 artifacts:
   files:
-    - target/*.jar
+    - target/Exercise-1.0.2.jar.original
