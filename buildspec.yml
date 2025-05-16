@@ -10,4 +10,4 @@ phases:
       - mvn clean package -DskipTests
 artifacts:
   files:
-    - target/*.jar app.jar
+    - target/*.jar
