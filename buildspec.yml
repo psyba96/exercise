@@ -8,6 +8,8 @@ phases:
     commands:
       - echo Building the Spring Boot app...
       - mvn clean package -DskipTests
+      - echo "Listing files in the target directory:"
+      - ls -R target/
 artifacts:
   files:
-    - /tmp/codebuild/output/src780/src/s3/01/target/Exercise-1.0.2.jar.original
+    - target/Exercise-1.0.2.jar.original
