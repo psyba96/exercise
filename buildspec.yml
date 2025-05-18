@@ -7,7 +7,7 @@ phases:
   build:
     commands:
       - echo Building the Spring Boot app...
-      - mvn clean package -DskipTests
+      - mvn clean package
       - echo "Listing files in the target directory:"
       - ls -R target/
 artifacts:
