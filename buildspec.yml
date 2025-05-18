@@ -4,12 +4,20 @@ phases:
   install:
     runtime-versions:
       java: corretto17
+    commands:
+      - echo Installing dependencies...
+      - mvn install -DskipTests
+
   build:
     commands:
       - echo Building the Spring Boot app...
-      - mvn clean install
-      - echo "Listing files in the target directory:"
-      - ls -R target/
+      - mvn clean package
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - ls -l target/
+      - mv target/*.jar springboot-app.jar
+      
 artifacts:
   files:
-    - target/Exercise-1.0.2.jar.original
+    - springboot-app.jar
