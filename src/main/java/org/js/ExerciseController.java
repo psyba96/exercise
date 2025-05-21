@@ -11,7 +11,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/exercise") // Base URL for this controller
+@RequestMapping("/psyba/api/exercise") // Base URL for this controller
 @Validated
 public class ExerciseController {
 
