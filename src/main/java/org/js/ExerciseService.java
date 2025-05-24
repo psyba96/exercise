@@ -1,9 +1,11 @@
 package org.js;
 
-import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ExerciseService {
@@ -51,21 +53,34 @@ public class ExerciseService {
     }
 
     public Exercise createExercise(NewExerciseDTO newExerciseDTO) {
-        // Map NewExerciseDTO fields to Exercise entity
-      /*  Exercise exercise = new Exercise();
-        exercise.setName(newExerciseDTO.getName());
-        exercise.setCategory(newExerciseDTO.getCategory());
-        exercise.setEquipment(newExerciseDTO.getEquipment());
-        exercise.setLevel(newExerciseDTO.getLevel());
-        exercise.setMechanic(newExerciseDTO.getMechanic());
-        exercise.setForce(newExerciseDTO.getForce());
-        exercise.setVersion(newExerciseDTO.getVersion());
-        exercise.setInstructions(newExerciseDTO.getInstructions());
-        exercise.setPrimaryMuscles(newExerciseDTO.getPrimaryMuscles());
-        exercise.setSecondaryMuscles(newExerciseDTO.getSecondaryMuscles());*/
         Exercise exercise = ExerciseMapper.INSTANCE.toEntity(newExerciseDTO);
         return exerciseRepository.save(exercise);
     }
 
-
+    public List<Exercise> getExercises(String name, List<Muscle> pMuscle, List<Muscle> sMuscle, String level, String force) {
+        Specification<Exercise> spec = Specification.where(null);
+        if (name != null) {
+            spec = spec.and(ExerciseSpecification.byName(name));
+        }
+        if (level != null) {
+            spec = spec.and(ExerciseSpecification.byLevel(level));
+        }
+        if (force != null) {
+            spec = spec.and(ExerciseSpecification.byForce(force));
+        }
+        List<Exercise> filteredSet = this.exerciseRepository.findAll(spec);
+        if (pMuscle != null) {
+            for (Muscle m : pMuscle) {
+                filteredSet = filteredSet.stream()
+                        .filter(e -> e.getPrimaryMuscles().contains(m))
+                        .collect(Collectors.toList());
+            }}
+        if (sMuscle != null) {
+            for (Muscle m : sMuscle) {
+                filteredSet = filteredSet.stream()
+                        .filter(e -> e.getSecondaryMuscles().contains(m))
+                        .collect(Collectors.toList());
+            }}
+        return filteredSet;
+    }
 }

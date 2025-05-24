@@ -7,27 +7,22 @@ public enum Muscle {
     CHEST("Pectorals"),
     BACK("Latissimus Dorsi, Trapezius"),
     SHOULDERS("Deltoids"),
-
-    TRICEPS("arms"),
-    BICEPS("arms"),
+    TRICEPS("Triceps"),
+    BICEPS("Biceps Brachii"),
     FOREARMS("Flexors, Extensors"),
-
     ABDOMINALS("Rectus Abdominis, Obliques"),
     LOWER_BACK("lower back"),
-
-
     GLUTES("Gluteus Maximus, Medius"),
     QUADRICEPS("Rectus Femoris, Vastus Group"),
     HAMSTRINGS("Biceps Femoris, Semitendinosus, Semimembranosus"),
     CALVES("Gastrocnemius, Soleus"),
-
     CARDIO("Cardiovascular System"),
     NECK("Neck, Neck and Back"),
     ADDUCTORS("Adductors"),
     ABDUCTORS("Abductors"),
     LATS("Lats, Latissimus Dorsi, Trapezius"),
     TRAPS("Traps"),
-    MIDDLE_BACK("middle back"),
+    MIDDLE_BACK("Middle Back"),
     ;
 
     private final String description;

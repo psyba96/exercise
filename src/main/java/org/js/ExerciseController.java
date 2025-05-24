@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import java.net.URI;
 import java.util.List;
 
@@ -26,8 +25,9 @@ public class ExerciseController {
 
     // GET: Retrieve all records
     @GetMapping("")
-    List<Exercise> findAll() {
-        return this.exerciseRepository.findAll();
+    List<Exercise> findAll(@RequestParam(required = false) String name,@RequestParam(required = false) String level,@RequestParam(required = false) String force,
+                           @RequestParam(required = false) List<Muscle> pMuscle,@RequestParam(required = false) List<Muscle> sMuscle) {
+        return this.exerciseService.getExercises(name,pMuscle,sMuscle,level,force);
     }
 
     // GET: Retrieve a specific record by ID
