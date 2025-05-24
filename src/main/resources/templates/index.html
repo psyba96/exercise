@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Exercise Search</title>
+    <script src="/script.js" defer></script>
+    <style>
+        body { font-family: Arial; padding: 2rem; }
+        input { padding: 0.5rem; width: 200px; }
+        .exercise { margin-top: 1rem; }
+    </style>
+</head>
+<body>
+<h2>Search Exercises</h2>
+<input type="text" id="searchInputName" class="search-input" placeholder="Enter name, primary muscle..." style="margin-bottom: 1rem;">
+
+<select id="searchInputMuscle" class="search-input"
+        style="margin-bottom: 1rem; padding: 0.5rem; width: 200px; text-align: center;">
+    <option value=""  selected>Select a muscle</option>
+    <option value="CHEST">Chest</option>
+    <option value="BACK">Back</option>
+    <option value="TRAPS">Traps</option>
+    <option value="LATS">Lats</option>
+    <option value="NECK">Neck</option>
+    <option value="MIDDLE_BACK">Mid Back</option>
+    <option value="LOWER_BACK">Lower Back</option>
+    <option value="QUADRICEPS">Quads</option>
+    <option value="HAMSTRINGS">Hamnstrings</option>
+    <option value="ADDUCTORS">Adductors</option>
+    <option value="ABDUCTORS">Abductors</option>
+    <option value="CALVES">Calves</option>
+    <option value="BICEPS">Biceps</option>
+    <option value="TRICEPS">Triceps</option>
+    <option value="FOREARMS">Forearms</option>
+    <option value="SHOULDERS">Shoulders</option>
+    <option value="ABDOMINALS">Abs</option>
+</select>
+<button id="searchButton" style="margin-left: 1rem; padding: 0.5rem 1rem;">Search</button>
+<div id="results" class="exercise"></div>
+</body>
+</html>

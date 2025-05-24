@@ -11,7 +11,7 @@
     </parent>
     <groupId>org.js</groupId>
     <artifactId>Exercise</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -20,6 +20,10 @@
     </properties>
     <dependencies>
         <!-- Spring Boot Starter Data JPA -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
