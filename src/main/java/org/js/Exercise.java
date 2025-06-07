@@ -121,5 +121,9 @@ public class Exercise {
         this.name = name;
     }
 
+    public String toString() {
+        return "Exercise [name=" + name + ", force=" + force + ", level=" + level + ", mechanic=" + mechanic + ", equipment=" + equipment + ", secondaryMuscles=" + secondaryMuscles + ",]";
+    }
+
 
 }

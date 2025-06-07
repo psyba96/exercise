@@ -1,26 +1,30 @@
 package org.js;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
+
 
 @RestController
 @RequestMapping("/psyba/api/exercise") // Base URL for this controller
 @Validated
 public class ExerciseController {
-
-    @Autowired
     private final ExerciseRepository exerciseRepository;
     private final ExerciseService exerciseService;
 
     public ExerciseController(ExerciseRepository exerciseRepository, ExerciseService exerciseService) {
         this.exerciseRepository = exerciseRepository;
         this.exerciseService = exerciseService;
+    }
+
+    @PostMapping("/prompt")
+    public ResponseEntity<Map<String, String>> getResponse(@RequestBody Map<String, String> request) {
+        return exerciseService.getAllExercisesWithAI(request.get("muscle"),request.get("level"),request.get("secondary"));
     }
 
     // GET: Retrieve all records
