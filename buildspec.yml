@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   parameter-store:
-    spring.ai.openai.api-key: openapi-sk
+    openai_key: openapi-sk
     
 phases:
   install:
