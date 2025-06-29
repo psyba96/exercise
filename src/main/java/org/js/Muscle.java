@@ -2,6 +2,11 @@ package org.js;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public enum Muscle {
 
     CHEST("Pectorals"),
@@ -23,8 +28,9 @@ public enum Muscle {
     LATS("Lats, Latissimus Dorsi, Trapezius"),
     TRAPS("Traps"),
     MIDDLE_BACK("Middle Back"),
+    OBLIQUES("Obliques"),
+    HIP_FLEXORS("Psoas major and iliacus,Rectus femoris,Sartorius,Pectineus,Tensor fasciae latae (TFL)")
     ;
-
     private final String description;
 
     Muscle(String description) {
@@ -47,5 +53,21 @@ public enum Muscle {
         throw new IllegalArgumentException("Unknown muscle: " + value);
     }
 
+    public static List<Muscle> convertToMuscleList(String muscleGroup) {
+        if (muscleGroup == null || muscleGroup.trim().isEmpty()) {
+            return new ArrayList<>();
+        }
+        return Arrays.stream(muscleGroup.split(","))
+                .map(String::trim)
+                .map(muscle -> muscle.toUpperCase().replace(" ", "_"))
+                .map(Muscle::valueOf)
+                .collect(Collectors.toList());
+    }
+
+    public static String getAllEnumValues() {
+        return Arrays.stream(Muscle.values())
+                .map(Enum::name)
+                .collect(Collectors.joining(", "));
+    }
 
 }

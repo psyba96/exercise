@@ -12,6 +12,7 @@ public class Exercise {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
+    private String gifHash;
     private String force;
     private String level;
     private String mechanic;
@@ -30,6 +31,14 @@ public class Exercise {
     private int version;
 
     public Exercise() {
+    }
+
+    public String getGifHash() {
+        return gifHash;
+    }
+
+    public void setGifHash(String gifHash) {
+        this.gifHash = gifHash;
     }
 
     public String getForce() {
