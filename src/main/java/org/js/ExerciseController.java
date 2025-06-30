@@ -1,7 +1,6 @@
 package org.js;
 
 import jakarta.validation.Valid;
-import org.js.ai.ExercisesFinal;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +8,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 
 @RestController
@@ -24,16 +22,9 @@ public class ExerciseController {
         this.exerciseService = exerciseService;
     }
 
-    @PostMapping("/prompt_one")
-    public Optional<ExercisesFinal> getOptionOutput(@RequestBody Map <String,String> request )
-    {
-        return exerciseService.testAiOptions(request.get("muscle_group"),request.get("level"));
-    }
-
     @PostMapping("/prompt")
-    public Optional<ExercisesFinal> getResponse(@RequestBody Map<String, String> request) {
-        return exerciseService.testAiOptions(request.get("muscle_group"),request.get("level"));
-        //return exerciseService.getAllExercisesWithAI(request.get("muscle_group"),request.get("muscle"),request.get("level"),request.get("secondary"));
+    public ResponseEntity<Map<String, String>> getResponse(@RequestBody Map<String, String> request) {
+        return exerciseService.getAllExercisesWithAI(request.get("muscle"),request.get("level"),request.get("secondary"));
     }
 
     // GET: Retrieve all records
