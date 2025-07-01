@@ -60,15 +60,21 @@
         .search-input,
         select,
         input[list] {
-          padding: 0.85rem;
-          border: 1px solid #ccc;
-          border-radius: 0.5rem;
+          display: block;
+          box-sizing: border-box;
           width: 100%;
           font-size: 1rem;
           font-family: 'Space Mono', monospace;
+          padding: 0.85rem;
+          border: 1px solid #ccc;
+          border-radius: 0.5rem;
           background: #f9f7f3;
+          appearance: none;
+          -webkit-appearance: none;
+          -moz-appearance: none;
           transition: border 0.2s, box-shadow 0.2s;
         }
+
 
         .search-input:focus,
         select:focus,
@@ -172,6 +178,12 @@
         <button id="searchButtonAi">Workout plan</button>
     </div>
     <div id="results" class="exercise"></div>
+    <div id="loader" style="display:none; text-align:center; margin-top:1rem;">
+        <div class="spinner"></div>
+        <p style="font-family:'Space Mono', monospace; color:#555; margin-top:0.5rem;">Loading AI results...</p>
+    </div>
+    <div id="error" style="display:none; text-align:center; color:#b00020; font-family:'Space Mono', monospace; margin-top:1rem;"></div>
+
 </div>
 </body>
 </html>

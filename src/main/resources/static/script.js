@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const results = document.getElementById('results');
   const searchButton = document.getElementById('searchButton');
   const searchButtonAi = document.getElementById('searchButtonAi');
+  const loader = document.getElementById('loader');
+  const errorDiv = document.getElementById('error');
 
   const toTitleCase = (str) => {
     if (!str || typeof str !== 'string') return '';
@@ -185,5 +187,20 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   searchButton.addEventListener('click', fetchExercises);
-  searchButtonAi.addEventListener('click', fetchExercisesAi);
+  searchButtonAi.addEventListener('click', async () => {
+    loader.style.display = 'block';
+    errorDiv.style.display = 'none';
+    errorDiv.textContent = '';
+
+    try {
+      await fetchExercisesAi(); // your real fetch function
+    } catch (err) {
+      console.error('AI fetch failed:', err);
+      errorDiv.textContent = 'Oops! Something went wrong. Please try again later.';
+      errorDiv.style.display = 'block';
+    } finally {
+      loader.style.display = 'none';
+    }
+  });
+
 });
