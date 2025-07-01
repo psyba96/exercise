@@ -1,49 +1,177 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Exercise Search</title>
     <script src="/script.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Raleway:wght@700&family=Space+Mono&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Arial; padding: 2rem; }
-        input { padding: 0.5rem; width: 200px; }
-        .exercise { margin-top: 1rem; }
+        body {
+          margin: 0;
+          padding: 0;
+          font-family: 'Inter', sans-serif;
+          background: #fefaf3;
+          color: #333;
+          display: flex;
+          justify-content: center;
+          align-items: flex-start;
+          min-height: 100vh;
+          padding: 2rem;
+        }
+
+        .container {
+          max-width: 700px;
+          width: 100%;
+          background: white;
+          border-radius: 1rem;
+          box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+          padding: 2.5rem;
+          border: 1px solid #ddd;
+        }
+
+        h2 {
+              margin-top: 0;
+              font-family: 'Rubik Mono One', sans-serif;
+              font-weight: 400;
+              font-size: 2.2rem;
+              text-align: center;
+              color: #d85d28;
+              letter-spacing: 2px;
+            }
+
+        .tagline {
+          text-align: center;
+          color: #555;
+          font-family: 'Space Mono', monospace;
+          font-size: 1rem;
+          margin-top: -0.5rem;
+          margin-bottom: 1.5rem;
+        }
+
+        .input-group {
+          display: flex;
+          flex-direction: column;
+          gap: 1.2rem;
+          margin-bottom: 2rem;
+        }
+
+        .search-input,
+        select,
+        input[list] {
+          padding: 0.85rem;
+          border: 1px solid #ccc;
+          border-radius: 0.5rem;
+          width: 100%;
+          font-size: 1rem;
+          font-family: 'Space Mono', monospace;
+          background: #f9f7f3;
+          transition: border 0.2s, box-shadow 0.2s;
+        }
+
+        .search-input:focus,
+        select:focus,
+        input[list]:focus {
+          border-color: #d85d28;
+          box-shadow: 0 0 0 3px rgba(216,93,40,0.2);
+          outline: none;
+        }
+
+        .button-group {
+          display: flex;
+          gap: 1rem;
+          justify-content: center;
+          flex-wrap: wrap;
+        }
+
+        button {
+          padding: 0.75rem 1.75rem;
+          font-size: 1rem;
+          border: none;
+          border-radius: 2rem;
+          cursor: pointer;
+          transition: background 0.2s, transform 0.2s;
+          font-family: 'Space Mono', monospace;
+        }
+
+        #searchButton {
+          background-color: #4a7c7c;
+          color: white;
+        }
+
+        #searchButton:hover {
+          background-color: #3b6363;
+          transform: translateY(-2px);
+        }
+
+        #searchButtonAi {
+          background-color: #d85d28;
+          color: white;
+        }
+
+        #searchButtonAi:hover {
+          background-color: #b84f23;
+          transform: translateY(-2px);
+        }
+
+        .exercise {
+          margin-top: 2rem;
+          border-top: 1px dashed #ccc;
+          padding-top: 1.5rem;
+        }
     </style>
 </head>
 <body>
-<h2>Search Exercises</h2>
-<input type="text" id="searchInputName" class="search-input" placeholder="Enter name, primary muscle..." style="margin-bottom: 1rem;">
-
-<select id="searchInputMuscle" class="search-input"
-        style="margin-bottom: 1rem; padding: 0.5rem; width: 200px; text-align: center;">
-    <option value=""  selected>Select a muscle</option>
-    <option value="CHEST">Chest</option>
-    <option value="BACK">Back</option>
-    <option value="TRAPS">Traps</option>
-    <option value="LATS">Lats</option>
-    <option value="NECK">Neck</option>
-    <option value="MIDDLE_BACK">Mid Back</option>
-    <option value="LOWER_BACK">Lower Back</option>
-    <option value="QUADRICEPS">Quads</option>
-    <option value="HAMSTRINGS">Hamstrings</option>
-    <option value="ADDUCTORS">Adductors</option>
-    <option value="ABDUCTORS">Abductors</option>
-    <option value="CALVES">Calves</option>
-    <option value="BICEPS">Biceps</option>
-    <option value="TRICEPS">Triceps</option>
-    <option value="FOREARMS">Forearms</option>
-    <option value="SHOULDERS">Shoulders</option>
-    <option value="ABDOMINALS">Abs</option>
-</select>
-<select id="searchLevel" class="search-input"
-        style="margin-bottom: 1rem; padding: 0.5rem; width: 200px; text-align: center;">
-    <option value=""  selected>Select difficulty level</option>
-    <option value="beginner">Beginner</option>
-    <option value="intermediate">Intermediate</option>
-    <option value="expert">Expert</option>
-</select>
-<button id="searchButton" style="margin-left: 1rem; padding: 0.5rem 1rem;">Search</button>
-<button id="searchButtonAi" style="background:black;color:aqua; margin-left: 1rem; padding: 0.5rem 1rem;">!Search</button>
-<div id="results" class="exercise"></div>
-
+<div class="container">
+    <h2>PSYBA</h2>
+    <div class="input-group">
+        <input type="text" id="searchInputName" class="search-input" placeholder="Enter exercise name or primary muscle">
+        <select id="searchInputMuscle">
+            <option value="" selected>Select a muscle</option>
+            <option value="CHEST">Chest</option>
+            <option value="BACK">Back</option>
+            <option value="TRAPS">Traps</option>
+            <option value="LATS">Lats</option>
+            <option value="NECK">Neck</option>
+            <option value="MIDDLE_BACK">Mid Back</option>
+            <option value="LOWER_BACK">Lower Back</option>
+            <option value="QUADRICEPS">Quads</option>
+            <option value="HAMSTRINGS">Hamstrings</option>
+            <option value="ADDUCTORS">Adductors</option>
+            <option value="ABDUCTORS">Abductors</option>
+            <option value="CALVES">Calves</option>
+            <option value="BICEPS">Biceps</option>
+            <option value="TRICEPS">Triceps</option>
+            <option value="FOREARMS">Forearms</option>
+            <option value="SHOULDERS">Shoulders</option>
+            <option value="ABDOMINALS">Abs</option>
+        </select>
+        <input list="muscleGroupCombo" id="muscleGroupInput" placeholder="Select or type muscle group">
+        <datalist id="muscleGroupCombo">
+            <option value="Full Upper Body">
+            <option value="Push Day">
+            <option value="Pull Day">
+            <option value="Complete Legs">
+            <option value="Upper Legs">
+            <option value="Upper Front">
+            <option value="Upper Back & Arms">
+            <option value="Shoulder Focus">
+            <option value="Core Strength">
+            <option value="Complete Arms">
+        </datalist>
+        <select id="searchLevel">
+            <option value="" selected>Select difficulty level</option>
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+        </select>
+    </div>
+    <div class="button-group">
+        <button id="searchButton">Search</button>
+        <button id="searchButtonAi">Workout plan</button>
+    </div>
+    <div id="results" class="exercise"></div>
+</div>
 </body>
 </html>

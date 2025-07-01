@@ -16,20 +16,30 @@ public class Exercise {
     private String level;
     private String mechanic;
     private String equipment;
+    private String category;
+    private String gifHash;
+    @Enumerated(EnumType.STRING)
+    private List<Muscle> primaryMuscles;
     @Enumerated(EnumType.STRING)
     private List<Muscle> secondaryMuscles;
     @ElementCollection
     @CollectionTable(name = "exercise_instructions", joinColumns = @JoinColumn(name = "exercise_id"))
     @Column(name = "instructions",length = 1000)
     private List<String> instructions;
-    private String category;
-    @Enumerated(EnumType.STRING)
-    private List<Muscle> primaryMuscles;
+
 
     @Version
     private int version;
 
     public Exercise() {
+    }
+
+    public String getGifHash() {
+        return gifHash;
+    }
+
+    public void setGifHash(String gifHash) {
+        this.gifHash = gifHash;
     }
 
     public String getForce() {
@@ -104,7 +114,6 @@ public class Exercise {
         this.version = version;
     }
 
-    // Getters and setters (required for JPA to access fields)
     public Integer getId() {
         return  id;
     }
@@ -122,8 +131,18 @@ public class Exercise {
     }
 
     public String toString() {
-        return "Exercise [name=" + name + ", force=" + force + ", level=" + level + ", mechanic=" + mechanic + ", equipment=" + equipment + ", secondaryMuscles=" + secondaryMuscles + ",]";
+        return "Exercise [name=" + name + ", equipment=" + equipment + ", primaryMuscles=" + primaryMuscles + ",]";
     }
 
+    public void copyFrom(Exercise other) {
+        this.setPrimaryMuscles(other.getPrimaryMuscles());
+        this.setMechanic(other.getMechanic());
+        this.setSecondaryMuscles(other.getSecondaryMuscles());
+        this.setLevel(other.getLevel());
+        this.setForce(other.getForce());
+        this.setInstructions(other.getInstructions());
+        this.setName(other.getName());
+        this.setCategory(other.getCategory());
+    }
 
 }

@@ -7,7 +7,7 @@ class MuscleTest {
     @Test
     void testFromValue_WithEnumName() {
         assertEquals(Muscle.CHEST, Muscle.fromValue("CHEST"));
-        assertEquals(Muscle.BACK, Muscle.fromValue("BACK"));
+        assertEquals(Muscle.TRICEPS, Muscle.fromValue("TRICEPS"));
     }
 
     @Test

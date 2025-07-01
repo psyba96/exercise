@@ -2,10 +2,15 @@ package org.js;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public enum Muscle {
 
     CHEST("Pectorals"),
-    BACK("Latissimus Dorsi, Trapezius"),
+    //BACK("Latissimus Dorsi, Trapezius"),
     SHOULDERS("Deltoids"),
     TRICEPS("Triceps"),
     BICEPS("Biceps Brachii"),
@@ -23,8 +28,9 @@ public enum Muscle {
     LATS("Lats, Latissimus Dorsi, Trapezius"),
     TRAPS("Traps"),
     MIDDLE_BACK("Middle Back"),
+    OBLIQUES("Obliques"),
+    HIP_FLEXORS("Psoas major and iliacus,Rectus femoris,Sartorius,Pectineus,Tensor fasciae latae (TFL)")
     ;
-
     private final String description;
 
     Muscle(String description) {
@@ -47,5 +53,31 @@ public enum Muscle {
         throw new IllegalArgumentException("Unknown muscle: " + value);
     }
 
+    public static List<Muscle> convertToMuscleList(Object muscleGroup) {
+        List<String> inputList;
+
+        if (muscleGroup instanceof String) {
+            if (muscleGroup == null || ((String) muscleGroup).trim().isEmpty()) {
+                return new ArrayList<>();
+            }
+            inputList = Arrays.asList(((String) muscleGroup).split(","));
+        } else if (muscleGroup instanceof List) {
+            inputList = (List<String>) muscleGroup;
+        } else {
+            throw new IllegalArgumentException("Unsupported input type");
+        }
+
+        return inputList.stream()
+                .map(String::trim)
+                .map(s -> s.toUpperCase().replace(" ", "_"))
+                .map(Muscle::valueOf)
+                .collect(Collectors.toList());
+    }
+
+    public static String getAllEnumValues() {
+        return Arrays.stream(Muscle.values())
+                .map(Enum::name)
+                .collect(Collectors.joining(", "));
+    }
 
 }

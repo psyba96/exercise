@@ -7,9 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ai.chat.client.ChatClient;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -52,11 +50,12 @@ class ExerciseServiceTest {
 
     @Test
     void testUpdateExercise() {
-        Exercise updatedExercise = new Exercise();
-        updatedExercise.setName("Updated Bench Press");
-
+        Map<String,Object> updatedExercise = new HashMap<>();
+        updatedExercise.put("name", "Updated Bench Press");
+        Exercise mock = new Exercise();
+        mock.setName("Updated Bench Press");
         when(exerciseRepository.findById(1)).thenReturn(Optional.of(exercise));
-        when(exerciseRepository.save(any(Exercise.class))).thenReturn(updatedExercise);
+        when(exerciseRepository.save(any(Exercise.class))).thenReturn(mock);
 
         Exercise result = exerciseService.updateExercise(1, updatedExercise);
 
@@ -71,7 +70,7 @@ class ExerciseServiceTest {
         when(exerciseRepository.findById(999)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () ->
-                exerciseService.updateExercise(999, new Exercise())
+                exerciseService.updateExercise(999, new HashMap<String,Object>())
         );
     }
 
@@ -85,7 +84,10 @@ class ExerciseServiceTest {
                 Arrays.asList(Muscle.CHEST),
                 null,
                 "Intermediate",
-                "Push"
+                "Push",
+                null,
+                null,
+                null
         );
 
         assertNotNull(result);

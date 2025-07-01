@@ -9,8 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,57 +29,65 @@ public class ExerciseService {
     }
 
     @Transactional
-    public Exercise updateExercise(int id, Exercise updatedExercise) {
+    public Exercise updateExercise(int id, Map<String, Object> updates) {
         Exercise existingExercise = exerciseRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Exercise with ID " + id + " not found"));
-
-        if (updatedExercise.getName() != null) {
-            existingExercise.setName(updatedExercise.getName());
-        }
-        if (updatedExercise.getCategory() != null) {
-            existingExercise.setCategory(updatedExercise.getCategory());
-        }
-        if (updatedExercise.getEquipment() != null) {
-            existingExercise.setEquipment(updatedExercise.getEquipment());
-        }
-        if (updatedExercise.getVersion() != 0) {
-            existingExercise.setVersion(updatedExercise.getVersion());
-        }
-        if (updatedExercise.getForce() != null) {
-            existingExercise.setForce(updatedExercise.getForce());
-        }
-        if (updatedExercise.getInstructions() != null) {
-            existingExercise.setInstructions(updatedExercise.getInstructions());
-        }
-        if (updatedExercise.getLevel() != null) {
-            existingExercise.setLevel(updatedExercise.getLevel());
-        }
-        if (updatedExercise.getMechanic() != null) {
-            existingExercise.setMechanic(updatedExercise.getMechanic());
-        }
-        if (updatedExercise.getPrimaryMuscles() != null) {
-            existingExercise.setPrimaryMuscles(updatedExercise.getPrimaryMuscles());
-        }
-        if (updatedExercise.getSecondaryMuscles() != null) {
-            existingExercise.setSecondaryMuscles(updatedExercise.getSecondaryMuscles());
-        }
-
+        updates.forEach((key, value) -> {
+            switch (key) {
+                case "name":
+                    existingExercise.setName((String) value);
+                    break;
+                case "force":
+                    existingExercise.setForce((String) value);
+                    break;
+                case "level":
+                    existingExercise.setLevel((String) value);
+                    break;
+                case "category":
+                    existingExercise.setCategory((String) value);
+                    break;
+                case "equipment":
+                    existingExercise.setEquipment((String) value);
+                    break;
+                case "mechanic":
+                    existingExercise.setMechanic((String) value);
+                    break;
+                case "primaryMuscles":
+                    existingExercise.setPrimaryMuscles(Muscle.convertToMuscleList(value));
+                    break;
+                case "secondaryMuscles":
+                    existingExercise.setSecondaryMuscles(Muscle.convertToMuscleList(value));
+                    break;
+                case "instructions":
+                    existingExercise.setInstructions((List<String>) value);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Field " + key + " not allowed to be updated.");
+            }
+        });
         return exerciseRepository.save(existingExercise);
     }
 
     public Exercise createExercise(NewExerciseDTO newExerciseDTO) {
+        if (exerciseRepository.existsByName(newExerciseDTO.getName())) {
+            throw new IllegalArgumentException("Exercise with the same name already exists.");
+
+        }
         Exercise exercise = ExerciseMapper.INSTANCE.toEntity(newExerciseDTO);
         return exerciseRepository.save(exercise);
     }
 
-    public ResponseEntity getAllExercisesWithAI(String muscle,String level,String secondary) {
+    public ResponseEntity getAllExercisesWithAI(String muscle,String level,String secondary,String prompt) {
+
+
+
         try {
             if ((muscle == null || muscle.trim().isEmpty())) {
                 return ResponseEntity
                         .badRequest()
                         .body(Map.of("error", "Prompt cannot be empty"));
             }
-            List<Exercise> exercises = getExercises(null,List.of(Muscle.fromValue(muscle)),null,null,null);
+            List<Exercise> exercises = getExercises(null,List.of(Muscle.fromValue(muscle)),null,null,null,null,null,null);
             String promptForMuscle = "Prepare a workout routine for muscle group " + muscle + " refer to available exercises below(retain exact exercise name in the prepared plan):" + exercises.toString();
             String promptForLevel = level != null ? (" catered for experience level: " + level):"";
             String promptForSecondary = secondary != null ? (" should engage these secondary muscles: " + secondary):"";
@@ -109,8 +120,17 @@ public class ExerciseService {
         }
     }
 
-    public List<Exercise> getExercises(String name, List<Muscle> pMuscle, List<Muscle> sMuscle, String level, String force) {
-        Specification<Exercise> spec = Specification.where(null);
+    public List<Exercise> getExercises(
+            String name,
+            List<Muscle> pMuscle,
+            List<Muscle> sMuscle,
+            String level,
+            String force,
+            String category,
+            String equipment,
+            String mechanic) {
+
+        Specification<Exercise> spec =  Specification.where(null);
         if (name != null) {
             spec = spec.and(ExerciseSpecification.byName(name));
         }
@@ -120,19 +140,57 @@ public class ExerciseService {
         if (force != null) {
             spec = spec.and(ExerciseSpecification.byForce(force));
         }
-        List<Exercise> filteredSet = this.exerciseRepository.findAll(spec);
-        if (pMuscle != null) {
-            for (Muscle m : pMuscle) {
-                filteredSet = filteredSet.stream()
-                        .filter(e -> e.getPrimaryMuscles().contains(m))
-                        .collect(Collectors.toList());
-            }}
-        if (sMuscle != null) {
-            for (Muscle m : sMuscle) {
-                filteredSet = filteredSet.stream()
-                        .filter(e -> e.getSecondaryMuscles().contains(m))
-                        .collect(Collectors.toList());
-            }}
-        return filteredSet;
+        if (category != null) {
+            spec = spec.and(ExerciseSpecification.byCategory(category));
+        }
+        if (mechanic != null) {
+            spec = spec.and(ExerciseSpecification.byMechanic(mechanic));
+        }
+        if (equipment != null) {
+            spec = spec.and(ExerciseSpecification.byEquipment(equipment));
+        }
+        List<Exercise> filtered = exerciseRepository.findAll(spec);
+
+        // Filter primary muscles if provided
+        if (pMuscle != null && !pMuscle.isEmpty()) {
+            System.out.println(pMuscle);
+            filtered = filtered.stream()
+                    .filter(e -> !Collections.disjoint(e.getPrimaryMuscles(), pMuscle))
+                    .collect(Collectors.toList());
+        }
+
+        // Filter secondary muscles if provided
+        if (sMuscle != null && !sMuscle.isEmpty()) {
+
+            filtered = filtered.stream()
+                    .filter(e -> !Collections.disjoint(e.getSecondaryMuscles(), sMuscle))
+                    .collect(Collectors.toList());
+        }
+
+        return filtered;
+    }
+
+
+    public Optional<Exercise> getExerciseById(int id) {
+        return exerciseRepository.findById(id);
+    }
+
+    public Optional<Exercise> upsertExercise(int id,Exercise newExercise){
+        Optional<Exercise> optionalExercise = exerciseRepository.findById(id);
+        if (optionalExercise.isEmpty()) {
+            return (optionalExercise);
+        }
+        Exercise existingExercise = optionalExercise.get();
+        existingExercise.copyFrom(newExercise);
+        Exercise updatedExercise = exerciseRepository.save(existingExercise);
+        return Optional.of(updatedExercise);
+    }
+
+    public boolean delete(int id){
+        if (exerciseRepository.existsById(id)) {
+            exerciseRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }
