@@ -1,13 +1,15 @@
 package org.js.ai;
 
-import org.js.Exercise;
-import org.js.ExerciseService;
-import org.js.Exercises;
-import org.js.WorkoutExercise;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.js.*;
+import org.js.Set;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 @Service
 public class ExerciseAiService {
@@ -116,6 +118,21 @@ public class ExerciseAiService {
         Exercises plan = client.prompt(promptTwo).call().entity(Exercises.class);
         System.out.println(plan.toString());
         Map<String,Object> fp = getFinalPlan(plan,finalList);
+
+        /*For mocking single exercise update
+        org.js.Set mockSet = new Set();
+        mockSet.setReps("12");
+        mockSet.setSets("3");
+        WorkoutExercise mockExercise1 = new WorkoutExercise();
+        mockExercise1.setName("barbell one arm snatch");
+        mockExercise1.setSet(mockSet);
+        WorkoutExercise mockExercise2 = new WorkoutExercise();
+        mockExercise2.setName("barbell one arm snatch");
+        mockExercise2.setSet(mockSet);
+        Exercises mockPlan = new Exercises();
+        mockPlan.setPlan(List.of(mockExercise1,mockExercise2));
+        List<Exercise> mockList = exerciseService.getExercises("barbell",null,null,null,null,null,null,null);
+        Map<String,Object> fp = getFinalPlan(mockPlan,mockList);*/
         return fp;
 
     }
@@ -131,6 +148,7 @@ public class ExerciseAiService {
                     .ifPresent(e -> {
                                 Map<String, Object> obj = new HashMap<>();
                                 obj.put("name", e.getName());
+                                obj.put("pMuscle",e.getPrimaryMuscles());
                                 obj.put("equipment", e.getEquipment());
                                 obj.put("difficulty", e.getLevel());
                                 obj.put("instructions", e.getInstructions());
@@ -141,5 +159,72 @@ public class ExerciseAiService {
         }
         System.out.println(finalPlan.toString());
         return finalPlan;
+    }
+
+    public Map<String,Object> getNewExerciseForPlan (Map<String,Object> planToBeUpdated){
+        String existingPlan = (String) planToBeUpdated.get("existingExercises");
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            List<Map<String, Object>> existingPlanJson = mapper.readValue(
+                    existingPlan,
+                    new TypeReference<List<Map<String, Object>>>() {
+                    }
+            );
+            List<Map<String, Object>> mappedPlan = existingPlanJson.stream()
+                    .map(obj -> {
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("name", obj.get("name"));
+                        map.put("level", obj.get("difficulty"));
+                        map.put("set", obj.get("set"));
+                        map.put("target_muscle",obj.get("pMuscle"));
+                        return map;
+                    })
+                    .collect(Collectors.toList());
+            //Map<String, Object> existingExerciseJson = new HashMap<>();
+            List<String> targetMuscles = mappedPlan.stream()
+                    .map(obj -> (List<?>) obj.get("target_muscle"))
+                    .filter(Objects::nonNull)
+                    .flatMap(List::stream)
+                    .filter(Objects::nonNull)
+                    .map(Object::toString)
+                    .distinct()
+                    .collect(Collectors.toList());
+            List<String> existingExercises = mappedPlan.stream()
+                    .map(obj -> obj.get("name"))
+                    .filter(Objects::nonNull)
+                    .map(Object::toString)
+                    .distinct()
+                    .collect(Collectors.toList());
+            String level = mappedPlan.get(0).get("level").toString();
+            Map<String,Object> set = (Map<String,Object>) mappedPlan.get(0).get("set");
+
+            // Pick a random exercise
+            List<Exercise> exercises = exerciseService.getExercises(null, Muscle.convertToMuscleList(targetMuscles),null,level,null,null,null,null);
+            if (exercises.isEmpty()) {
+                throw new IllegalStateException("No exercises found");
+            }
+            int randomIndex = ThreadLocalRandom.current().nextInt(exercises.size());
+
+            Exercise rando = exercises.get(randomIndex);
+            while (existingExercises.contains(rando.getName())){
+                rando = exercises.get(randomIndex);
+            }
+            Map<String, Object> obj = new HashMap<>();
+            obj.put("name", rando.getName());
+            obj.put("pMuscle",rando.getPrimaryMuscles());
+            obj.put("equipment", rando.getEquipment());
+            obj.put("difficulty", rando.getLevel());
+            obj.put("instructions", rando.getInstructions());
+            obj.put("gifHash", rando.getGifHash());
+            obj.put("set", set);
+            return obj;
+
+        }
+        catch (Exception e){
+            Map<String, Object> exMap = new HashMap<>();
+            exMap.put("details", e.getMessage());
+            return exMap;
+
+        }
     }
 }

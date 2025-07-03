@@ -19,7 +19,7 @@ public class ExerciseSpecification {
         return (root, query, cb) -> cb.equal(root.get("mechanic"), mechanic);
     }
     public static Specification<Exercise> byEquipment(String equipment) {
-        return (root, query, cb) -> cb.equal(root.get("equipment"), equipment);
+        return (root, query, cb) -> cb.like(cb.lower(root.get("equipment")), "%" + equipment.toLowerCase() + "%");
     }
 
 }

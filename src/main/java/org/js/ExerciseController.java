@@ -87,4 +87,9 @@ public class ExerciseController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @PostMapping("/singleExercise")
+    public ResponseEntity<Map<String,Object>> getSingleExerciseForPlan(@RequestBody Map<String,Object> inputFromUi){
+        return ResponseEntity.ok(aiService.getNewExerciseForPlan(inputFromUi));
+    }
 }
