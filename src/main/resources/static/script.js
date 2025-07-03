@@ -330,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const exercises = JSON.parse(saved);
                 console.log('Restored exercises:', exercises);
               }
-      const response = await fetch('http://3.90.42.248/psyba/api/exercise/singleExercise', {
+      const response = await fetch('psyba/api/exercise/singleExercise', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -466,7 +466,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
           try {
 
-                      const response = await fetch(`http://3.90.42.248/psyba/api/exercise?${params.toString()}`, {
+                      const response = await fetch(`psyba/api/exercise?${params.toString()}`, {
                         method: 'GET'
                       });
 
