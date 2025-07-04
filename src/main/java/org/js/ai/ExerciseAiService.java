@@ -161,7 +161,7 @@ public class ExerciseAiService {
         return finalPlan;
     }
 
-    public Map<String,Object> getNewExerciseForPlan (Map<String,Object> planToBeUpdated){
+    public Exercise getNewExerciseForPlan (Map<String,Object> planToBeUpdated){
         String existingPlan = (String) planToBeUpdated.get("existingExercises");
         try {
             ObjectMapper mapper = new ObjectMapper();
@@ -209,21 +209,10 @@ public class ExerciseAiService {
             while (existingExercises.contains(rando.getName())){
                 rando = exercises.get(randomIndex);
             }
-            Map<String, Object> obj = new HashMap<>();
-            obj.put("name", rando.getName());
-            obj.put("pMuscle",rando.getPrimaryMuscles());
-            obj.put("equipment", rando.getEquipment());
-            obj.put("difficulty", rando.getLevel());
-            obj.put("instructions", rando.getInstructions());
-            obj.put("gifHash", rando.getGifHash());
-            obj.put("set", set);
-            return obj;
-
+            return rando;
         }
         catch (Exception e){
-            Map<String, Object> exMap = new HashMap<>();
-            exMap.put("details", e.getMessage());
-            return exMap;
+            return new Exercise();
 
         }
     }

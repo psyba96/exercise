@@ -12,7 +12,8 @@
           margin: 0;
           padding: 0;
           font-family: 'Inter', sans-serif;
-          background: #fefaf3;
+          background:url("/images/bruised-banana.webp") repeat;
+          background-size: 500px auto;
           color: #333;
           display: flex;
           justify-content: center;
@@ -190,63 +191,153 @@
           background-color: #3b6363;
         }
 
+        .carousel {
+              position: relative;
+            }
+            .slide {
+              display: none;
+              animation: fade 0.3s ease;
+            }
+            #slide1:checked ~ .carousel .slide:nth-child(1),
+            #slide2:checked ~ .carousel .slide:nth-child(2) {
+              display: block;
+            }
+            .carousel-dots {
+              text-align: center;
+              margin-top: 1rem;
+            }
+            .carousel-dots label {
+              display: inline-block;
+              width: 10px;
+              height: 10px;
+              margin: 0 6px;
+              border-radius: 50%;
+              background: #ccc;
+              cursor: pointer;
+            }
+            #slide1:checked ~ .carousel-dots label[for="slide1"],
+            #slide2:checked ~ .carousel-dots label[for="slide2"] {
+              background: #4a7c7c;
+            }
+            @keyframes fade {
+              from { opacity:0; }
+              to { opacity:1; }
+            }
     </style>
 </head>
 <body>
 <div class="container">
     <h2>PSYBA</h2>
-    <div class="input-group">
-        <input type="text" id="searchInputName" class="search-input" placeholder="Enter exercise name or primary muscle">
-        <select id="searchInputMuscle">
-            <option value="" selected>Select target muscle</option>
-            <option value="CHEST">Chest</option>
-            <option value="TRAPS">Traps</option>
-            <option value="LATS">Lats</option>
-            <option value="NECK">Neck</option>
-            <option value="MIDDLE_BACK">Mid Back</option>
-            <option value="LOWER_BACK">Lower Back</option>
-            <option value="QUADRICEPS">Quads</option>
-            <option value="HAMSTRINGS">Hamstrings</option>
-            <option value="ADDUCTORS">Adductors</option>
-            <option value="ABDUCTORS">Abductors</option>
-            <option value="CALVES">Calves</option>
-            <option value="BICEPS">Biceps</option>
-            <option value="TRICEPS">Triceps</option>
-            <option value="FOREARMS">Forearms</option>
-            <option value="SHOULDERS">Shoulders</option>
-            <option value="ABDOMINALS">Abs</option>
-        </select>
-        <input list="muscleGroupCombo" id="muscleGroupInput" placeholder="Select or type muscle group">
-        <datalist id="muscleGroupCombo">
-            <option value="Full Upper Body">
-            <option value="Push Day">
-            <option value="Pull Day">
-            <option value="Complete Legs">
-            <option value="Upper Legs">
-            <option value="Upper Front">
-            <option value="Upper Back & Arms">
-            <option value="Shoulder Focus">
-            <option value="Core Strength">
-            <option value="Complete Arms">
-        </datalist>
-        <select id="searchLevel">
-            <option value="" selected>Select difficulty level</option>
-            <option value="beginner">Beginner</option>
-            <option value="intermediate">Intermediate</option>
-            <option value="advanced">Advanced</option>
-        </select>
-    </div>
-    <div class="button-group">
-        <button id="searchButton">Search</button>
-        <button id="searchButtonAi">Workout plan</button>
-    </div>
-    <div id="results" class="exercise"></div>
-    <div id="loader" style="display:none; text-align:center; margin-top:1rem;">
-        <div class="spinner"></div>
-        <p style="font-family:'Space Mono', monospace; color:#555; margin-top:0.5rem;">Loading AI results...</p>
-    </div>
-    <div id="error" style="display:none; text-align:center; color:#b00020; font-family:'Space Mono', monospace; margin-top:1rem;"></div>
 
+    <!-- Radio toggles -->
+    <input type="radio" name="carousel" id="slide1" checked hidden>
+    <input type="radio" name="carousel" id="slide2" hidden>
+
+    <!-- Carousel slides -->
+    <div class="carousel">
+        <div class="slide">
+            <div class="input-group">
+                <input list="muscleGroupCombo" id="muscleGroupInput" placeholder="Describe your goal">
+                <datalist id="muscleGroupCombo">
+                    <option value="Full Upper Body">
+                    <option value="Push Day">
+                    <option value="Pull Day">
+                    <option value="Complete Legs">
+                    <option value="Upper Legs">
+                    <option value="Upper Front">
+                    <option value="Upper Back & Arms">
+                    <option value="Shoulder Focus">
+                    <option value="Core Strength">
+                    <option value="Complete Arms">
+                </datalist>
+                <select id="aiSearchLevel">
+                    <option value="" selected>Select difficulty</option>
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                </select>
+            </div>
+            <div class="button-group">
+                <button id="searchButtonAi">Generate Plan</button>
+            </div>
+        </div>
+        <div class="slide">
+            <div class="input-group">
+                <select id="searchInputMuscle">
+                    <option value="" selected>Select target muscle</option>
+                    <option value="CHEST">Chest</option>
+                    <option value="TRAPS">Traps</option>
+                    <option value="LATS">Lats</option>
+                    <option value="NECK">Neck</option>
+                    <option value="MIDDLE_BACK">Mid Back</option>
+                    <option value="LOWER_BACK">Lower Back</option>
+                    <option value="QUADRICEPS">Quads</option>
+                    <option value="HAMSTRINGS">Hamstrings</option>
+                    <option value="ADDUCTORS">Adductors</option>
+                    <option value="ABDUCTORS">Abductors</option>
+                    <option value="CALVES">Calves</option>
+                    <option value="BICEPS">Biceps</option>
+                    <option value="TRICEPS">Triceps</option>
+                    <option value="FOREARMS">Forearms</option>
+                    <option value="SHOULDERS">Shoulders</option>
+                    <option value="ABDOMINALS">Abs</option>
+                </select>
+                <select id="searchLevel">
+                    <option value="" selected>Select difficulty</option>
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                </select>
+            </div>
+            <div class="button-group">
+                <button id="searchButton">Search</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dots navigation -->
+    <div class="carousel-dots">
+        <label for="slide1"></label>
+        <label for="slide2"></label>
+    </div>
+
+    <div id="results"></div>
+    <div id="loader" style="display:none;">
+        <div class="spinner"></div>
+        <p>Loading AI results...</p>
+    </div>
+    <div id="error" style="display:none;"></div>
+</div>
+
+<div id="demoModal" style="
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0,0,0,0.6);
+  align-items: center;
+  justify-content: center;
+">
+    <div style="
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    max-width: 90%;
+    max-height: 80%;
+    position: relative;
+  ">
+        <button id="closeModalBtn" style="
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: transparent;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    ">×</button>
+        <img id="demoModalImage" src="" alt="Exercise Demo" style="max-width: 100%; max-height: 70vh;" />
+    </div>
 </div>
 </body>
 </html>

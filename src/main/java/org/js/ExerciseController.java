@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -38,7 +39,9 @@ public class ExerciseController {
     List<Exercise> findAll(@RequestParam(required = false) String name,@RequestParam(required = false) String level,@RequestParam(required = false) String force,
                            @RequestParam(required = false) String mechanic,@RequestParam(required = false) String category,@RequestParam(required = false) String equipment,
                            @RequestParam(required = false) List<Muscle> pMuscle,@RequestParam(required = false) List<Muscle> sMuscle) {
-        return this.exerciseService.getExercises(name,pMuscle,sMuscle,level,force,category,equipment,mechanic);
+        List<Exercise> exercises = this.exerciseService.getExercises(name,pMuscle,sMuscle,level,force,category,equipment,mechanic);
+        exercises.sort(Comparator.comparing(Exercise::getName));
+        return exercises;
     }
 
     // GET: Retrieve a specific record by ID
@@ -89,7 +92,7 @@ public class ExerciseController {
     }
 
     @PostMapping("/singleExercise")
-    public ResponseEntity<Map<String,Object>> getSingleExerciseForPlan(@RequestBody Map<String,Object> inputFromUi){
+    public ResponseEntity<Exercise> getSingleExerciseForPlan(@RequestBody Map<String,Object> inputFromUi){
         return ResponseEntity.ok(aiService.getNewExerciseForPlan(inputFromUi));
     }
 }

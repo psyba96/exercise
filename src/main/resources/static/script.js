@@ -8,6 +8,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchButtonAi = document.getElementById('searchButtonAi');
   const loader = document.getElementById('loader');
   const errorDiv = document.getElementById('error');
+  const modal = document.getElementById('demoModal');
+  const modalImage = document.getElementById('demoModalImage');
+  const closeModalBtn = document.getElementById('closeModalBtn');
+
+
 
   const toTitleCase = (str) => {
     if (!str || typeof str !== 'string') return '';
@@ -30,9 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const queryParams = [];
 
-      if (inputName.value) {
+      /*if (inputName.value) {
         queryParams.push(`name=${encodeURIComponent(inputName.value)}`);
-      }
+      }*/
       if (inputMuscle.value) {
         queryParams.push(`pMuscle=${encodeURIComponent(inputMuscle.value)}`);
       }
@@ -62,9 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
         postBody.prompt = inputMuscle.value;
       }
 
-      if (inputName.value) {
+      /*if (inputName.value) {
         postBody.name = encodeURIComponent(inputName.value);
-      }
+      }*/
       if (inputMuscle.value) {
         postBody.muscle = encodeURIComponent(inputMuscle.value);
       }
@@ -104,6 +109,8 @@ document.addEventListener('DOMContentLoaded', () => {
       div.style.border = '1px solid #ccc';
       div.style.padding = '10px';
       div.style.margin = '10px 0';
+      div.dataset.sets = exercise.set?.sets || '';
+      div.dataset.reps = exercise.set?.reps || '';
 
       const instructionsList = Array.isArray(exercise.instructions)
         ? `<ol>${exercise.instructions.map(inst => `<li>${inst}</li>`).join('')}</ol>`
@@ -204,7 +211,18 @@ document.addEventListener('DOMContentLoaded', () => {
         : exercise.instructions || 'N/A';
 
       div.innerHTML = `
-        <h3>${exercise.name}</h3>
+       <div style="display:flex; justify-content:space-between; align-items:center;">
+           <h3 style="margin:0;">${toTitleCase(exercise.name)}</h3>
+           <button class="view-demo-btn" style="
+             padding:0.3rem 0.6rem;
+             font-size:0.8rem;
+             cursor:pointer;
+             border:none;
+             border-radius:4px;
+             background-color:#4a7c7c;
+             color:#fff;
+           ">View Demo</button>
+         </div>
         <p><strong>Level:</strong> ${toTitleCase(exercise.level) || 'None'}</p>
         <p><strong>Primary Muscles:</strong> ${
           exercise.primaryMuscles?.map(muscle =>
@@ -231,6 +249,10 @@ document.addEventListener('DOMContentLoaded', () => {
           ${instructionsList}
         </details>
       `;
+      const viewDemoBtn = div.querySelector('.view-demo-btn');
+      viewDemoBtn.addEventListener('click', () => {
+        showDemoModal(exercise.gifHash);
+      });
       results.appendChild(div);
     });
   };
@@ -253,6 +275,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
     const updateExerciseCard = (div, exercise) => {
+      console.log("Updating exercise card:", {
+        div,
+        exercise
+      });
+      const sets = div.dataset.sets;
+      const reps = div.dataset.reps;
       const instructionsList = Array.isArray(exercise.instructions)
         ? `<ol>${exercise.instructions.map(inst => `<li>${inst}</li>`).join('')}</ol>`
         : exercise.instructions || 'N/A';
@@ -294,8 +322,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <p>GIF demonstration not available</p>
           </div>
         </div>
-        <p><strong>Sets:</strong> ${toTitleCase(exercise.set?.sets) || 'None'}</p>
-        <p><strong>Reps:</strong> ${toTitleCase(exercise.set?.reps) || 'None'}</p>
+        <p><strong>Sets:</strong> ${sets} </p>
+        <p><strong>Reps:</strong> ${reps} </p>
         <p><strong>Instructions:</strong></p>
         <details>
           <summary>Click to view instructions</summary>
@@ -330,7 +358,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const exercises = JSON.parse(saved);
                 console.log('Restored exercises:', exercises);
               }
-      const response = await fetch('http://3.90.42.248/psyba/api/exercise/singleExercise', {
+      const response = await fetch('psyba/api/exercise/singleExercise', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -466,7 +494,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
           try {
 
-                      const response = await fetch(`http://3.90.42.248/psyba/api/exercise?${params.toString()}`, {
+                      const response = await fetch(`psyba/api/exercise?${params.toString()}`, {
                         method: 'GET'
                       });
 
@@ -554,5 +582,20 @@ document.addEventListener('DOMContentLoaded', () => {
       return exerciseList;
     };
 
+    const showDemoModal = (gifHash) => {
+        modalImage.src = `https://exercise-demo-gifs.s3.us-east-1.amazonaws.com/${gifHash}.gif`;
+        modal.style.display = 'flex';
+      };
 
+      closeModalBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+        modalImage.src = '';
+      });
+
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.style.display = 'none';
+          modalImage.src = '';
+        }
+      });
 });
