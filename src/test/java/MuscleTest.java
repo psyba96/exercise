@@ -1,4 +1,4 @@
-import org.js.Muscle;
+import org.js.model.Muscle;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

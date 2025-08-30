@@ -3,8 +3,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
-import org.js.Exercise;
-import org.js.Muscle;
+import org.js.model.Exercise;
+import org.js.model.Muscle;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ExerciseTest {

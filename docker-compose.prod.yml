@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:16  # Official PostgreSQL image
+    environment:
+      POSTGRES_DB: webapi
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432"  # Expose DB to host for tools like pgAdmin
+    volumes:
+      - db-data:/var/lib/postgresql/data  # Persist data locally
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d webapi"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    image: myspringbootapp  # Your Spring Boot image
+    build:
+      context: .
+      dockerfile: Dockerfile  # Ensure Dockerfile exists
+    depends_on:
+      - db
+    volumes:
+      - ./logs:/app/logs
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/webapi
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: root
+    networks:
+      - app-network
+
+volumes:
+  db-data:
+
+networks:
+  app-network:
+    driver: bridge
