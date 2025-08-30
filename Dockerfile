@@ -11,6 +11,8 @@ RUN mvn clean package -DskipTests  # Skip tests for faster builds; remove if nee
 # Stage 2: Create the runtime image
 FROM amazoncorretto:17-alpine-jdk
 WORKDIR /app
+# Create logs directory and set permissions
+RUN mkdir -p /app/logs && chmod -R 777 /app/logs
 # Copy the JAR from the build stage (use wildcard to handle dynamic version)
 COPY --from=builder /build/target/*.jar app.jar
 
