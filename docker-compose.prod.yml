@@ -19,7 +19,7 @@ services:
       retries: 5
 
   app:
-    image: myspringbootapp  # Your Spring Boot image
+    image: 124355640783.dkr.ecr.us-east-1.amazonaws.com/exercise-crud
     build:
       context: .
       dockerfile: Dockerfile  # Ensure Dockerfile exists
