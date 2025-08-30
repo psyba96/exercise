@@ -10,7 +10,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>org.js</groupId>
-    <artifactId>Exercise</artifactId>
+    <artifactId>exercise-crud</artifactId>
     <version>2.0.0</version>
 
     <properties>
