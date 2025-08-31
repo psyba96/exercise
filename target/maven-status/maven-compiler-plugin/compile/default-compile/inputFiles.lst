@@ -1,0 +1,14 @@
+C:\Users\User\Documents\AWS learning\GIT\exercise\src\main\java\org\js\annotation\NoIdOnInsert.java
+C:\Users\User\Documents\AWS learning\GIT\exercise\src\main\java\org\js\annotation\NoIdOnInsertValidator.java
+C:\Users\User\Documents\AWS learning\GIT\exercise\src\main\java\org\js\controller\ExerciseCrudController.java
+C:\Users\User\Documents\AWS learning\GIT\exercise\src\main\java\org\js\dto\ExerciseMapper.java
+C:\Users\User\Documents\AWS learning\GIT\exercise\src\main\java\org\js\dto\NewExerciseDTO.java
+C:\Users\User\Documents\AWS learning\GIT\exercise\src\main\java\org\js\exception\GlobalExceptionHandler.java
+C:\Users\User\Documents\AWS learning\GIT\exercise\src\main\java\org\js\exception\ResourceNotFoundException.java
+C:\Users\User\Documents\AWS learning\GIT\exercise\src\main\java\org\js\log\CorrelationIdFilter.java
+C:\Users\User\Documents\AWS learning\GIT\exercise\src\main\java\org\js\model\Exercise.java
+C:\Users\User\Documents\AWS learning\GIT\exercise\src\main\java\org\js\model\Muscle.java
+C:\Users\User\Documents\AWS learning\GIT\exercise\src\main\java\org\js\repository\ExerciseRepository.java
+C:\Users\User\Documents\AWS learning\GIT\exercise\src\main\java\org\js\repository\ExerciseSpecification.java
+C:\Users\User\Documents\AWS learning\GIT\exercise\src\main\java\org\js\service\ExerciseService.java
+C:\Users\User\Documents\AWS learning\GIT\exercise\src\main\java\org\js\SpringBootApp.java
